@@ -2,7 +2,11 @@
 
 import _ from 'lodash';
 import React from 'react';
+
 import { Mixin } from './../stores/app-store';
+import RemoveFromCart from './remove-from-cart';
+import IncreaseItem from './increase-item';
+import DecreaseItem from './decrease-item';
 
 class AppCart extends React.Component {
   mixins: [Mixin],
@@ -14,10 +18,15 @@ class AppCart extends React.Component {
           total += subtotal;
           return (
             <tr key={cartItem.id}>
-              <td><RemoveFromCart index={index} /></td>
+              <td>
+                <RemoveFromCart index={index} />
+              </td>
               <td>{cartItem.name}</td>
               <td>{cartItem.qty}</td>
-              <td><DecreaseItem index={index} /><IncreaseItem index={index} /></td>
+              <td>
+                <DecreaseItem index={index} />
+                <IncreaseItem index={index} />
+              </td>
               <td>{subtotal}</td>
             </tr>
           );

@@ -4,14 +4,10 @@
 require('expose?jQuery!expose?$!jquery');
 require('expose?React!react/addons');
 
-import csp from 'js-csp';
 import $ from 'jquery';
 import React from 'react/addons';
 import Router from 'react-router';
 
-import AppActions from './actions/app-actions';
-import AppStore from './stores/app-store';
+$(document).ready(function() {
 
-console.log(AppActions);
-console.log(AppStore);
-// component
+});

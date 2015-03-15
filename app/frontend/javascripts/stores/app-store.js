@@ -8,7 +8,7 @@ import { publication } from './../dispatcher/dispatcher';
 
 // store data
 const APP_STORE_CHANGE_EVENT = 'APP_STORE_CHANGE_EVENT';
-const _catalog = [
+const _catalogs = [
         { id: 1, name: 'Widget #1', cost: 1 },
         { id: 2, name: 'Widget #2', cost: 2 },
         { id: 3, name: 'Widget #3', cost: 3 }
@@ -103,9 +103,11 @@ let Mixin = {
 };
 
 export default {
+  APP_STORE_CHANGE_EVENT,
+  getCartItems() { return _cartItems; },
+  getCatalogs() { return _catalogs; },
   inChan,
   outChan,
   appStorePub,
-  Mixin,
-  APP_STORE_CHANGE_EVENT
+  Mixin
 };
