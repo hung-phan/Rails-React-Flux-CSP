@@ -14,36 +14,36 @@ const _catalog = [
         { id: 3, name: 'Widget #3', cost: 3 }
       ];
 
-let _cartItem = [];
+let _cartItems = [];
 
 // store handler
 let _handlers = {
   addItem(item) {
     if (item.inCart) {
-      _cartItem.push(
+      _cartItems.push(
         _.merge(item, { qty: 1, inCart: 1 })
       );
     } else {
       let index;
 
-      if ((index = _.findIndex(_cartItem, cartItem => cartItem.id === item.id)) !== -1) {
+      if ((index = _.findIndex(_cartItems, cartItem => cartItem.id === item.id)) !== -1) {
         _increaseItem(index);
       }
     }
   },
 
   removeItem(index) {
-    _cartItem[index].inCart = false;
-    _cartItem.splice(index, 1);
+    _cartItems[index].inCart = false;
+    _cartItems.splice(index, 1);
   },
 
   increaseItem(index) {
-    _cartItem[index].qty++;
+    _cartItems[index].qty++;
   },
 
   decreaseItem(index) {
-    if (_cartItem[index].qty > 1) {
-      _cartItem[index].qty--;
+    if (_cartItems[index].qty > 1) {
+      _cartItems[index].qty--;
     } else {
       _removeItem(inde);
     }
@@ -83,7 +83,7 @@ let Mixin = {
   getInitialState() {
     return {
       appStoreOutChan: csp.chan(),
-      cartItem: _cartItem
+      cartItems: _cartItems
     };
   },
   componentWillMount() {
@@ -98,7 +98,7 @@ let Mixin = {
     this.state.appStoreOutChan.close();
   },
   appStoreOnChange() {
-    this.setState({ cartItem: _cartItem });
+    this.setState({ cartItems: _cartItems });
   }
 };
 
@@ -106,5 +106,6 @@ export default {
   inChan,
   outChan,
   appStorePub,
+  Mixin,
   APP_STORE_CHANGE_EVENT
 };

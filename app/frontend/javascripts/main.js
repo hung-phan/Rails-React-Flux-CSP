@@ -10,7 +10,8 @@ import React from 'react/addons';
 import Router from 'react-router';
 
 import AppActions from './actions/app-actions';
-import { storeChan } from './stores/app-store';
+import AppStore from './stores/app-store';
 
 console.log(AppActions);
+console.log(AppStore);
 // component
