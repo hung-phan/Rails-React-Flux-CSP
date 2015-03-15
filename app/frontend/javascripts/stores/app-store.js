@@ -45,7 +45,7 @@ let _handlers = {
     if (_cartItems[index].qty > 1) {
       _cartItems[index].qty--;
     } else {
-      _handlers.removeItem(inde);
+      _handlers.removeItem(index);
     }
   }
 };
@@ -90,13 +90,13 @@ let Mixin = {
     let appStoreOnChange = this.appStoreOnChange,
         appStoreOutChan  = this.state.appStoreOutChan;
 
-    console.log(appStorePublication)
-    //csp.operations.pub.sub(appStorePublication, APP_STORE_CHANGE_EVENT, this.state.appStoreOutChan);
-    //csp.go(function*() {
-      //while (yield appStoreOutChan !== csp.CLOSED) {
-        //appStoreOnChange();
-      //}
-    //});
+    csp.operations.pub.sub(appStorePublication, APP_STORE_CHANGE_EVENT, this.state.appStoreOutChan);
+    csp.go(function*() {
+      let payload;
+      while ((payload = yield appStoreOutChan) !== csp.CLOSED) {
+        appStoreOnChange();
+      }
+    });
   },
   componentWillUnmount() {
     this.state.appStoreOutChan.close();
