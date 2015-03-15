@@ -1,9 +1,11 @@
 'use strict';
 
-import Constants from "./../constants/app-constants";
-import csp from "js-csp";
+import csp from 'js-csp';
+import Constants from './../constants/app-constants';
 
-let sourceChan = csp.chan();
+let sourceChan        = csp.chan(),
+    extractActionType = payload => payload.actionType,
+    publication       = csp.operations.pub(sourceChan, extractActionType);
 
 let AppActions = {
   addItem(item) {
@@ -21,6 +23,6 @@ let AppActions = {
 };
 
 export default {
-  sourceChan,
-  AppActions
+  AppActions,
+  publication
 };
