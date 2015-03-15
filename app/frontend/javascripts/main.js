@@ -9,7 +9,7 @@ import $ from 'jquery';
 import React from 'react/addons';
 import Router from 'react-router';
 
-import * as AppActions from './actions/app-actions';
+import AppActions from './actions/app-actions';
 import { storeChan } from './stores/app-store';
 
 console.log(AppActions);

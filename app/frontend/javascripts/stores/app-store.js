@@ -16,67 +16,82 @@ const _catalog = [
 let _cartItem = [];
 
 // store handler
-let _addItem = item => {
-      if (item.inCart) {
-        _cartItem.push(
-          _.merge(item, { qty: 1, inCart: 1 })
-        );
-      } else {
-        let index;
+let _handlers = {
+  addItem(item) {
+    if (item.inCart) {
+      _cartItem.push(
+        _.merge(item, { qty: 1, inCart: 1 })
+      );
+    } else {
+      let index;
 
-        if ((index = _.findIndex(_cartItem, cartItem => cartItem.id === item.id)) !== -1) {
-          _increaseItem(index);
-        }
+      if ((index = _.findIndex(_cartItem, cartItem => cartItem.id === item.id)) !== -1) {
+        _increaseItem(index);
       }
-    };
+    }
+  },
 
-let _removeItem = index => {
-      _cartItem[index].inCart = false;
-      _cartItem.splice(index, 1);
-    };
+  removeItem(index) {
+    _cartItem[index].inCart = false;
+    _cartItem.splice(index, 1);
+  },
 
-let _increaseItem = index => _cartItem[index].qty++;
+  increaseItem(index) {
+    _cartItem[index].qty++;
+  },
 
-let _decreaseItem = index => {
-      if (_cartItem[index].qty > 1) {
-        _cartItem[index].qty--;
-      } else {
-        _removeItem(inde);
-      }
-    };
+  decreaseItem(index) {
+    if (_cartItem[index].qty > 1) {
+      _cartItem[index].qty--;
+    } else {
+      _removeItem(inde);
+    }
+  }
+};
 
 // pubsub channel
-let storeChan = csp.chan();
-csp.operations.pub.sub(publication, StoreDetails.AppStore, storeChan);
+const APP_STORE_CHANGE_EVENT = 'APP_STORE_CHANGE_EVENT';
+
+let inChan      = csp.chan(),
+    outChan     = csp.chan(),
+    appStorePub = csp.operations.pub(outChan, payload => payload.event);
+
+csp.operations.pub.sub(publication, StoreDetails.AppStore, inChan);
 csp.go(function*() {
   let payload;
 
-  while ((payload = yield storeChan)!== csp.CLOSED) {
+  while ((payload = yield inChan)!== csp.CLOSED) {
     switch (payload.actionType) {
       case Constants.ADD_ITEM:
-        _addItem(payload.item);
+        _handlers.addItem(payload.item);
         break;
       case Constants.REMOVE_ITEM:
-        _removeItem(payload.index);
+        _handlers.removeItem(payload.index);
         break;
       case Constants.INCREASE_ITEM:
-        _increaseItem(payload.index);
+        _handlers.increaseItem(payload.index);
         break;
       case Constants.DECREASE_ITEM:
-        _decreaseItem(payload.index);
+        _handlers.decreaseItem(payload.index);
         break;
     }
+    csp.putAsync(outChan, { event: APP_STORE_CHANGE_EVENT });
   }
 });
 
+
 let Mixin = {
   getInitialState() {
-    return { appStoreChan: csp.chan(), cartItem: _cartItem };
+    return {
+      appStoreChan: csp.chan(),
+      cartItem: _cartItem
+    };
   },
   componentWillMount() {
     let appStoreChan     = this.state.appStoreChan,
         appStoreOnChange = this.appStoreOnChange;
 
+    //csp.operations.pub.sub(appStorePub, StoreDetails.AppStore, inChan);
     csp.go(function*() {
       while (yield appStoreChan !== csp.CLOSED) {
         appStoreOnChange();
@@ -92,5 +107,5 @@ let Mixin = {
 };
 
 export default {
-  storeChan
+  inChan
 };
