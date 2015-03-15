@@ -7,6 +7,7 @@ import StoreDetails from './../constants/store-details';
 import { publication } from './../dispatcher/dispatcher';
 
 // store data
+const APP_STORE_CHANGE_EVENT = 'APP_STORE_CHANGE_EVENT';
 const _catalog = [
         { id: 1, name: 'Widget #1', cost: 1 },
         { id: 2, name: 'Widget #2', cost: 2 },
@@ -50,8 +51,6 @@ let _handlers = {
 };
 
 // pubsub channel
-const APP_STORE_CHANGE_EVENT = 'APP_STORE_CHANGE_EVENT';
-
 let inChan      = csp.chan(),
     outChan     = csp.chan(),
     appStorePub = csp.operations.pub(outChan, payload => payload.event);
@@ -83,23 +82,20 @@ csp.go(function*() {
 let Mixin = {
   getInitialState() {
     return {
-      appStoreChan: csp.chan(),
+      appStoreOutChan: csp.chan(),
       cartItem: _cartItem
     };
   },
   componentWillMount() {
-    let appStoreChan     = this.state.appStoreChan,
-        appStoreOnChange = this.appStoreOnChange;
-
-    //csp.operations.pub.sub(appStorePub, StoreDetails.AppStore, inChan);
+    csp.operations.pub.sub(appStorePub, APP_STORE_CHANGE_EVENT, this.state.appStoreOutChan);
     csp.go(function*() {
-      while (yield appStoreChan !== csp.CLOSED) {
-        appStoreOnChange();
+      while (yield appStoreOutChan !== csp.CLOSED) {
+        this.appStoreOnChange();
       }
-    });
+    }.bind(this));
   },
   componentWillUnmount() {
-    this.state.appStoreChan.close();
+    this.state.appStoreOutChan.close();
   },
   appStoreOnChange() {
     this.setState({ cartItem: _cartItem });
@@ -107,5 +103,8 @@ let Mixin = {
 };
 
 export default {
-  inChan
+  inChan,
+  outChan,
+  appStorePub,
+  APP_STORE_CHANGE_EVENT
 };
