@@ -1,0 +1,41 @@
+{
+  "name": "rails-react-flux-csp",
+  "devDependencies": {
+    "del": "*",
+    "gulp": "*",
+    "gulp-util": "*",
+    "jest-cli": "*",
+    "minimist": "*",
+    "node-notifier": "*",
+    "react-hot-loader": "*",
+    "webpack-dev-server": "*"
+  },
+  "dependencies": {
+    "webpack": "*",
+    "chunk-manifest-webpack-plugin": "*",
+    "babel": "*",
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-runtime": "*",
+    "exports-loader": "*",
+    "imports-loader": "*",
+    "expose-loader": "*",
+    "bundle-loader": "*",
+    "jquery": "*",
+    "lodash": "*",
+    "superagent": "*",
+    "react": "*",
+    "react-router": "*"
+  },
+  "scripts": {
+    "test": "jest",
+    "webpack-dev": "webpack-dev-server --config config/webpack/development.config.js --hot --progress --inline"
+  },
+  "jest": {
+    "scriptPreprocessor": "./preprocessor.js"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.10"
+  }
+}
