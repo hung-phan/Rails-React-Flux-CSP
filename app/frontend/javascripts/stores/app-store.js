@@ -3,7 +3,8 @@
 import _ from 'lodash';
 import csp from 'js-csp';
 import Constants from './../constants/app-constants';
-import { publication } from './actions/app-actions';
+import StoreDetails from './../constants/store-details';
+import { publication } from './../actions/app-actions';
 
 // store data
 const _catalog = [
@@ -21,7 +22,9 @@ let _addItem = item => {
           _.merge(item, { qty: 1, inCart: 1 })
         );
       } else {
-        if ((let index = _.findIndex(_cartItem, cartItem => cartItem.id === item.id)) !== -1) {
+        let index;
+
+        if ((index = _.findIndex(_cartItem, cartItem => cartItem.id === item.id)) !== -1) {
           _increaseItem(index);
         }
       }
@@ -42,4 +45,17 @@ let _decreaseItem = index => {
       }
     };
 
-csp.operations.pub.sub()
+
+let appStoreChan = csp.chan();
+csp.operations.pub.sub(publication, StoreDetails.AppStore, appStoreChan);
+csp.go(function*() {
+  let payload;
+
+  while ((payload = yield appStoreChan)!== csp.CLOSED) {
+    console.log(payload);
+  }
+});
+
+export default {
+  appStoreChan
+};
