@@ -19,15 +19,15 @@ let _cartItems = [];
 // store handler
 let _handlers = {
   addItem(item) {
-    if (item.inCart) {
+    if (!item.inCart) {
       _cartItems.push(
-        _.merge(item, { qty: 1, inCart: 1 })
+        _.merge(item, { qty: 1, inCart: true })
       );
     } else {
       let index;
 
       if ((index = _.findIndex(_cartItems, cartItem => cartItem.id === item.id)) !== -1) {
-        _increaseItem(index);
+        _handlers.increaseItem(index);
       }
     }
   },
@@ -45,15 +45,15 @@ let _handlers = {
     if (_cartItems[index].qty > 1) {
       _cartItems[index].qty--;
     } else {
-      _removeItem(inde);
+      _handlers.removeItem(inde);
     }
   }
 };
 
 // pubsub channel
-let inChan      = csp.chan(),
-    outChan     = csp.chan(),
-    appStorePub = csp.operations.pub(outChan, payload => payload.event);
+let inChan              = csp.chan(),
+    sourceChan          = csp.chan(),
+    appStorePublication = csp.operations.pub(sourceChan, payload => payload.event);
 
 csp.operations.pub.sub(publication, StoreDetails.AppStore, inChan);
 csp.go(function*() {
@@ -74,7 +74,7 @@ csp.go(function*() {
         _handlers.decreaseItem(payload.index);
         break;
     }
-    csp.putAsync(outChan, { event: APP_STORE_CHANGE_EVENT });
+    csp.putAsync(sourceChan, { event: APP_STORE_CHANGE_EVENT, update: true });
   }
 });
 
@@ -87,12 +87,16 @@ let Mixin = {
     };
   },
   componentWillMount() {
-    csp.operations.pub.sub(appStorePub, APP_STORE_CHANGE_EVENT, this.state.appStoreOutChan);
-    csp.go(function*() {
-      while (yield appStoreOutChan !== csp.CLOSED) {
-        this.appStoreOnChange();
-      }
-    }.bind(this));
+    let appStoreOnChange = this.appStoreOnChange,
+        appStoreOutChan  = this.state.appStoreOutChan;
+
+    console.log(appStorePublication)
+    //csp.operations.pub.sub(appStorePublication, APP_STORE_CHANGE_EVENT, this.state.appStoreOutChan);
+    //csp.go(function*() {
+      //while (yield appStoreOutChan !== csp.CLOSED) {
+        //appStoreOnChange();
+      //}
+    //});
   },
   componentWillUnmount() {
     this.state.appStoreOutChan.close();
@@ -107,7 +111,7 @@ export default {
   getCartItems() { return _cartItems; },
   getCatalogs() { return _catalogs; },
   inChan,
-  outChan,
-  appStorePub,
+  sourceChan,
+  appStorePublication,
   Mixin
 };

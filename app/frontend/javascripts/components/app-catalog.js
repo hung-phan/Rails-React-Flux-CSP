@@ -5,7 +5,7 @@ import React from 'react';
 import { getCatalogs } from './../stores/app-store';
 import AddToCart from './add-to-cart';
 
-class AppCatalog extends React.Component {
+let AppCatalog = React.createClass({
   getInitialState() {
     return {
       catalogs: getCatalogs()
@@ -33,11 +33,11 @@ class AppCatalog extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {items}
+          {catalogs}
         </tbody>
       </table>
     );
   }
-}
+});
 
 export default AppCatalog;

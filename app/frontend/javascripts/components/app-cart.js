@@ -8,11 +8,12 @@ import RemoveFromCart from './remove-from-cart';
 import IncreaseItem from './increase-item';
 import DecreaseItem from './decrease-item';
 
-class AppCart extends React.Component {
+let AppCart = React.createClass({
   mixins: [Mixin],
+
   render() {
     let total = 0,
-        item  = _.map(this.state.cartItems, (cartItem, index) => {
+        items = _.map(this.state.cartItems, (cartItem, index) => {
           let subtotal = cartItem.cost * cartItem.qty;
 
           total += subtotal;
@@ -54,6 +55,6 @@ class AppCart extends React.Component {
       </table>
     );
   }
-}
+});
 
 export default AppCart;

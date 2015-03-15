@@ -3,7 +3,7 @@
 import React from 'react';
 import AppActions from './../actions/app-actions';
 
-class RemoveFromCart from React.Component {
+let RemoveFromCart = React.createClass({
   removeFromCart(e) {
     AppActions.removeItem(this.props.index);
   },
@@ -14,6 +14,6 @@ class RemoveFromCart from React.Component {
     );
   }
 
-}
+});
 
 export default RemoveFromCart;
