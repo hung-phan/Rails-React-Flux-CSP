@@ -4,12 +4,12 @@
 require('expose?jQuery!expose?$!jquery');
 require('expose?React!react/addons');
 
+import csp from 'js-csp';
 import $ from 'jquery';
 import React from 'react/addons';
 import Router from 'react-router';
 
 import { AppActions } from './actions/app-actions';
-import * as AppStore from './stores/app-store';
+import { storeChan } from './stores/app-store';
 
-window.AppActions = AppActions;
 // component
