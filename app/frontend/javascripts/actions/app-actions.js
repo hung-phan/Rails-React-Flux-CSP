@@ -1,14 +1,11 @@
 'use strict';
 
 import csp from 'js-csp';
+import { sourceChan } from './../dispatcher/dispatcher';
 import Constants from './../constants/app-constants';
 import StoreDetails from './../constants/store-details';
 
-let sourceChan        = csp.chan(),
-    extractActionType = payload => payload.store,
-    publication       = csp.operations.pub(sourceChan, extractActionType);
-
-let AppActions = {
+export default {
   addItem(item) {
     csp.putAsync(sourceChan, { store: StoreDetails.AppStore, actionType: Constants.ADD_ITEM, item: item });
   },
@@ -21,9 +18,4 @@ let AppActions = {
   decreaseItem(index) {
     csp.putAsync(sourceChan, { store: StoreDetails.AppStore, actionType: Constants.DECREASE_ITEM, index: index });
   }
-};
-
-export default {
-  AppActions,
-  publication
 };

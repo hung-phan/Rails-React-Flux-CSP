@@ -9,7 +9,8 @@ import $ from 'jquery';
 import React from 'react/addons';
 import Router from 'react-router';
 
-import { AppActions } from './actions/app-actions';
+import * as AppActions from './actions/app-actions';
 import { storeChan } from './stores/app-store';
 
+console.log(AppActions);
 // component

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import csp from 'js-csp';
 import Constants from './../constants/app-constants';
 import StoreDetails from './../constants/store-details';
-import { publication } from './../actions/app-actions';
+import { publication } from './../dispatcher/dispatcher';
 
 // store data
 const _catalog = [
@@ -69,7 +69,7 @@ csp.go(function*() {
   }
 });
 
-Mixin = {
+let Mixin = {
   getInitialState() {
     return { appStoreChan: csp.chan(), cartItem: _cartItem };
   },
@@ -92,6 +92,5 @@ Mixin = {
 };
 
 export default {
-  storeChan,
-  dispatchChan
+  storeChan
 };
