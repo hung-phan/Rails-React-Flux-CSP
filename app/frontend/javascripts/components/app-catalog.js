@@ -5,12 +5,11 @@ import React from 'react';
 import { getCatalogs } from './../stores/app-store';
 import AddToCart from './add-to-cart';
 
-let AppCatalog = React.createClass({
-  getInitialState() {
-    return {
-      catalogs: getCatalogs()
-    }
-  },
+class AppCatalog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { catalogs: getCatalogs() };
+  }
 
   render() {
     let catalogs = _.map(this.state.catalogs, catalogItem => {
@@ -38,6 +37,6 @@ let AppCatalog = React.createClass({
       </table>
     );
   }
-});
+};
 
 export default AppCatalog;
