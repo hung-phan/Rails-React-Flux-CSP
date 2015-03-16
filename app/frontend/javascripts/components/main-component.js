@@ -1,6 +1,6 @@
 'use strict'
 
-import React from 'react';
+import React from 'react/addons';
 import AppCatalog from './app-catalog';
 import AppCart from './app-cart';
 

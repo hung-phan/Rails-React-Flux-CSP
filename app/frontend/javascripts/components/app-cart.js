@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import React from 'react';
+import React from 'react/addons';
 
 import { Mixin } from './../stores/app-store';
 import RemoveFromCart from './remove-from-cart';

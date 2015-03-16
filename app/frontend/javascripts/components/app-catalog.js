@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import React from 'react';
+import React from 'react/addons';
 import { getCatalogs } from './../stores/app-store';
 import AddToCart from './add-to-cart';
 

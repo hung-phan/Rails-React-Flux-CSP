@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React from 'react/addons';
 import AppActions from './../actions/app-actions';
 
 class DecreaseItem extends React.Component {
