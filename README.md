@@ -12,7 +12,7 @@ later.
 ## Idea
 
 Instead of [facebook/flux](https://github.com/facebook/flux) implementation, can we make communication between actions and stores, or
-stores and components more verbose.
+stores and components more verbose?
 
 ### The actions
 
